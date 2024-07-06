@@ -1,0 +1,105 @@
+# importing the required libraries
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.feature_selection import RFECV, SelectFromModel, SelectKBest  # feature selection
+
+# reading the file using  pandas
+df=pd.read_csv('/content/AAPL (1).csv')   # reading the file using panda 
+df.head()
+
+
+# plotting the graph
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the data
+df_stock = pd.read_csv('/content/AAPL (1).csv', parse_dates=['Date'], index_col='Date')
+
+# Display the first few rows of the DataFrame to verify
+print(df_stock.head())
+
+# Plotting the stock prices
+plt.figure(figsize=(14, 7))
+# plt.plot(df_stock.index, df['Open'], label='Open')
+# plt.plot(df_stock.index, df['High'], label='High')
+# plt.plot(df_stock.index, df['Low'], label='Low')
+plt.plot(df_stock.index, df['Close'], label='Close')
+
+# Customize the plot
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.title('Apple Stock Prices Over Time')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+
+df.info()    # checking the info , data types and null values etc.
+
+df.isnull().sum()   # checking the total number of null values in the dataset 
+df.dropna(inplace=True) # dropping the null values in the dataset
+
+df.isnull().sum() # again checking the total number of null values 
+max(df.Close)  # checking the maximum close price 
+df.shape  # checking the shape of the dataset
+df.columns  # getting columns names
+
+df.shape
+# drop column which is not important
+df=df.drop(['Date'],axis=1)
+
+df.head()
+
+# Breaking the data into train and target columns 
+
+X=df.drop(['Adj Close'],axis=1)
+y=df['Adj Close']
+
+X.columns  # checking the total columns present in the independent variables
+
+# shape of target value
+y.shape
+
+# shape of independent variables
+X.shape
+
+# Splitting the data into train test 
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=42)
+
+
+print("X_train shape :",X_train.shape)
+print("X_test shape :",X_test.shape)
+print("y_train shape :",y_train.shape)
+print("y_test shape :",y_test.shape)
+
+# dropping  the null value in the X_train permannently
+X_train.dropna(inplace=True)
+
+# after dropping the null value 
+X_train.isnull().sum()
+
+# same thing we hava to do is drop null value from y 
+y_train.dropna(inplace=True)
+
+# fillting the model into the dataset 
+model=LinearRegression()
+model.fit(X_train,y_train)
+
+# predicting
+y_pred=model.predict(X_test)
+
+print(y_pred[0])
+
+print(y_test[0])
+
+# r2 score
+r2_score(y_test,y_pred) --->>   0.9985104112914239
+
